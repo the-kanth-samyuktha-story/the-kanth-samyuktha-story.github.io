@@ -1,0 +1,16 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Kanth and Samyuktha//Engagement Invitation//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:kanth-samyuktha-engagement-20261112@invitation.local
+DTSTAMP:20261029T000000Z
+DTSTART:20261112T050000Z
+SUMMARY:Chandra Kanth and Samyuktha - Engagement
+LOCATION:Gopalraopet\, Medak\, Telangana\, India
+DESCRIPTION:Engagement Invitation. Invited by Thodupunuri Prabhakar and T
+ hodupunuri Amrutha.\nThursday\, 12 November 2026 at 10:30 AM IST.
+URL:https://googlemaps.com
+END:VEVENT
+END:VCALENDAR
