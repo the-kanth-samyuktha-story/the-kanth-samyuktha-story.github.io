@@ -18,6 +18,21 @@ function TemplePicture({ eager = false }: { eager?: boolean }) {
   return <picture><source media="(max-width: 650px)" srcSet={artwork.portrait}/><img src={artwork.landscape} alt="Cinematic Indian temple artwork framed by jasmine, roses, carved arches, and brass bells" loading={eager ? 'eager' : 'lazy'} fetchPriority={eager ? 'high' : 'auto'} /></picture>;
 }
 
+// The foreground uses the same artwork as the backdrop. Its vector silhouette
+// lets the opening title pass behind the actual temple as the camera moves.
+function TempleForeground() {
+  return <div className="temple-foreground" aria-hidden="true">
+    <svg className="temple-foreground-portrait" viewBox="0 0 1024 1536" preserveAspectRatio="xMidYMid slice">
+      <defs><clipPath id="portrait-temple" clipPathUnits="userSpaceOnUse"><path d="M0 1536V1180H105V1085H130V1040H172V1017H210V974H229V955H244V916H262V896H277V915H297V945H335V955H350V924H381V907H395V879H418V862H430V838H444V819H451V780H445V767H453V752H460V765H470V754H480V769H492V749H500V765H513V750H521V764H534V750H542V764H556V751H566V766H576V754H584V772H579V814H592V832H604V857H622V882H639V907H667V928H684V957H703V945H739V921H751V904H765V922H781V948H796V976H827V1017H866V1040H901V1085H928V1180H1024V1536Z"/></clipPath></defs>
+      <image href={artwork.portrait} width="1024" height="1536" clipPath="url(#portrait-temple)" />
+    </svg>
+    <svg className="temple-foreground-landscape" viewBox="0 0 1536 1024" preserveAspectRatio="xMidYMid slice">
+      <defs><clipPath id="landscape-temple" clipPathUnits="userSpaceOnUse"><path d="M0 1024V840H285V771H341V731H385V710H452V685H495V664H522V631H548V605H579V576H612V584H641V567H663V543H683V513H695V484H699V455H692V444H705V431H712V445H728V434H739V447H754V432H768V446H782V431H795V447H809V435H820V447H835V434H847V451H841V485H855V513H868V545H889V570H920V581H951V599H978V624H1001V656H1040V685H1090V710H1157V731H1195V771H1250V840H1536V1024Z"/></clipPath></defs>
+      <image href={artwork.landscape} width="1536" height="1024" clipPath="url(#landscape-temple)" />
+    </svg>
+  </div>;
+}
+
 const chapterLabels = ['A sacred beginning', 'Two hearts, one promise', 'An auspicious day', 'You are warmly invited'];
 function FilmText({ progress, stops, children, className = '', active }: { progress: MotionValue<number>; stops: number[]; children: ReactNode; className?: string; active: boolean }) {
   const opacity = useTransform(progress, stops, [0, 1, 1, 0]);
@@ -38,6 +53,8 @@ function CinematicStory({ onFilm, ambient }: { onFilm: () => void; ambient: bool
   const ritualScale = useTransform(progress, [.36, .88], [1.1, 1]);
   const openingOpacity = useTransform(progress, [0, .13, .22], [1, 1, 0]);
   const openingY = useTransform(progress, [0, .22], [0, -35]);
+  const titleY = useTransform(progress, [0, .06, .2], [0, 8, 88]);
+  const foregroundOpacity = useTransform(progress, [0, .16, .23], [1, 1, 0]);
   const endingOpacity = useTransform(progress, [.76, .87, 1], [0, 1, 1]);
   const endingY = useTransform(progress, [.76, .87], [30, 0]);
   const cueOpacity = useTransform(progress, [0, .08], [1, 0]);
@@ -57,9 +74,10 @@ function CinematicStory({ onFilm, ambient }: { onFilm: () => void; ambient: bool
         <p className="sacred-line">WITH LOVE & THE BLESSINGS OF OUR FAMILIES</p>
         <p className="story-title">The Story of Kanth ♥ Samyuktha</p>
         <h1><span>{invitation.names[0]}</span><i>♥</i><span>{invitation.names[1]}</span></h1>
-        <p className="script-title">Engagement Invitation</p>
+        <p className="script-title"><motion.span style={reduced ? {} : { y: titleY }}>Engagement Invitation</motion.span></p>
         <div className="opening-date"><span>{eventDate.day} {eventDate.month.toUpperCase()} {eventDate.year}</span><b>✦</b><span>{invitation.time}</span></div>
       </motion.div>
+      <motion.div className="temple-foreground-layer" style={reduced ? {} : { scale: templeScale, y: templeY, opacity: foregroundOpacity }}><TempleForeground/></motion.div>
       {!reduced && <><FilmText progress={progress} stops={[.17, .24, .35, .44]} active={chapter === 1} className="promise-copy"><Lotus/><p className="eyebrow">A BOND BLESSED. A JOURNEY BEGUN.</p><h2>Two hearts.<br/><em>One beautiful promise.</em></h2><p>Woven in tradition.<br/>Written with love.</p><span className="script-whisper">Our forever begins here.</span></FilmText>
       <FilmText progress={progress} stops={[.42, .5, .69, .79]} active={chapter === 2} className="date-copy"><p className="eyebrow">SAVE THIS BEAUTIFUL DAY</p><p className="date-weekday">{eventDate.weekday}</p><div className="ceremony-date"><span>{eventDate.month.toUpperCase()}</span><strong>{eventDate.day}</strong><span>{eventDate.year}</span></div><p className="ceremony-time">{invitation.time}</p><div className="small-divider"/><p className="date-note">The beginning of a lifetime, together.</p></FilmText>
       <motion.div className="film-copy closing-copy" style={{ opacity: endingOpacity, y: endingY }} aria-hidden={chapter !== 3}><p className="eyebrow">WITH OPEN HEARTS, WE INVITE YOU</p><h2>Come for the celebration.<br/><em>Stay in our story.</em></h2><p className="scene-venue">{invitation.venue}</p><p className="scene-address">{invitation.address}</p><p className="scene-hosts">With love from<br/><span>{invitation.hosts[0]} & {invitation.hosts[1]}</span></p></motion.div></>}
