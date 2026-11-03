@@ -30,23 +30,25 @@ Edit `lib/invitation.ts` to change the content. The visual date components deriv
 
 ## Experience
 
-The main invitation is a continuous full-screen sticky scene. Actual scroll progress drives the camera zoom, vertical movement, crossfades between the temple and ceremonial rings, and the timing of four text chapters. Chapter dots jump to their corresponding scroll positions. No scroll hijacking or required autoplay is used. A separate playable MP4 presents the artwork with camera movement, transitions, and the event details.
+The main invitation is a continuous full-screen sticky scene. Actual scroll progress drives the camera zoom, vertical movement, crossfades between the temple, ceremonial rings, and a closing garden, and the timing of four text chapters. Chapter dots jump to their corresponding scroll positions. No scroll hijacking or required autoplay is used. The opening title passes behind the temple as the scene moves.
 
 The supporting Pinterest-inspired editorial arrangement uses staggered image proportions, a floral arch crop, ceremonial rings, gold, jasmine, burgundy silk, and traditional Indian attire. The final invitation contains the complete details, an external maps link, and a downloadable calendar event. All former Western wedding media is unused by the current site.
 
-Reduced motion uses a stationary opening and the complete accessible invitation below it, without the prolonged scroll timeline. Petals can be paused independently. The film dialog uses native keyboard focus management, Escape dismissal, native video controls, and muted inline playback. No background videos or sound start without clicking “Play invitation.” The film is a silent illustrated invitation, not footage of the actual couple or venue.
+Reduced motion uses a stationary opening and the complete accessible invitation below it, without the prolonged scroll timeline. Petals are decorative and disabled for reduced motion. The video play and petal pause controls have been removed from the page.
 
 ## Artwork and film
 
-Three original artworks were generated using the built-in Imagegen tool, inspired by the supplied reference screenshots:
+The original temple and ceremonial artworks were generated using the built-in Imagegen tool, inspired by the supplied reference screenshots. The rings scene was later enhanced and a separate garden scene was generated for the closing chapter:
 
 - `public/media/indian/temple-portrait.png` and `.webp`
 - `public/media/indian/temple-landscape.png` and `.webp`
 - `public/media/indian/engagement-ritual.png` and `.webp`
+- `public/media/indian/engagement-ritual-v2.webp` (the live date scene and gallery image)
+- `public/media/indian/closing-garden-portrait.webp` and `closing-garden-landscape.webp` (the live closing scene)
 
 These are AI-generated cinematic illustrations, not photos of the couple or a verified depiction of the event venue. PNG originals are preserved. Optimized WebP copies are served on the page, with distinct portrait/landscape art direction. See `ART_DIRECTION.md` for the final generation prompts.
 
-`public/media/indian/invitation-film.mp4` is rendered from these artworks with separate caption layers. To regenerate it, install Pillow and imageio-ffmpeg in a Python environment, edit the caption scenes in `scripts/render-film.py`, and run:
+`public/media/indian/invitation-film.mp4` remains as an archived asset and is no longer linked from the page. To regenerate it, install Pillow and imageio-ffmpeg in a Python environment, edit the caption scenes in `scripts/render-film.py`, and run:
 
 ```sh
 python3 scripts/render-film.py
@@ -58,8 +60,6 @@ Typography: locally served Cormorant Garamond, DM Sans, and Pinyon Script. SIL O
 
 ## Verification
 
-Production build and TypeScript checks pass. The page, new artwork, calendar event, and film are checked over HTTP, including video byte-range requests. The calendar timezone and event date are checked against the supplied details. The final film is decoded to confirm it is playable.
-
-No connected browser is available in this environment. Actual desktop/mobile visual and interaction verification remains outstanding. Check the invitation at 1440px, 768px, 390px, and 320px widths; scroll forward and backward through all chapters; test scene navigation, film controls, Escape dismissal, map link, calendar download, pause-petals control, and reduced motion.
+Production build and TypeScript checks pass. Headless Chromium screenshots were reviewed at 280px, 390px, and 1440px widths for all four scenes. The removed controls are absent and the browser reported no page errors. Check the live deployment on a physical phone after pushing, especially the temple title transition and chapter navigation.
 
 The invitation is local only. Search indexing remains disabled while the site is being reviewed.

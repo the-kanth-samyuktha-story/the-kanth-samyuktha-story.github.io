@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform, type MotionValue } from 'motion/react';
-import { ArrowDown, ArrowUpRight, CalendarPlus, Heart, MapPin, Pause, Play, X } from 'lucide-react';
+import { ArrowDown, ArrowUpRight, CalendarPlus, Heart, MapPin } from 'lucide-react';
 import { artwork, eventDate, invitation } from '@/lib/invitation';
 
 function Lotus({ className = '' }: { className?: string }) {
@@ -41,20 +41,22 @@ function FilmText({ progress, stops, children, className = '', active }: { progr
   return <motion.div className={`film-copy ${className}`} style={{ opacity, y, filter: blur }} aria-hidden={!active}>{children}</motion.div>;
 }
 
-function CinematicStory({ onFilm, ambient }: { onFilm: () => void; ambient: boolean }) {
+function CinematicStory() {
   const ref = useRef<HTMLElement>(null);
   const reduced = useReducedMotion();
   const [chapter, setChapter] = useState(0);
   const { scrollYProgress: progress } = useScroll({ target: ref, offset: ['start start', 'end end'] });
   const templeScale = useTransform(progress, [0, .45, .7, 1], [1, 1.22, 1.17, 1.03]);
   const templeY = useTransform(progress, [0, .45, 1], ['0%', '-4%', '0%']);
-  const templeOpacity = useTransform(progress, [0, .36, .49, .76, .88, 1], [1, 1, 0, 0, 1, 1]);
+  const templeOpacity = useTransform(progress, [0, .36, .49, 1], [1, 1, 0, 0]);
   const ritualOpacity = useTransform(progress, [.36, .49, .76, .88], [0, 1, 1, 0]);
   const ritualScale = useTransform(progress, [.36, .88], [1.1, 1]);
-  const openingOpacity = useTransform(progress, [0, .13, .22], [1, 1, 0]);
+  const closingBackgroundOpacity = useTransform(progress, [.76, .88, 1], [0, 1, 1]);
+  const closingBackgroundScale = useTransform(progress, [.76, 1], [1.08, 1]);
+  const openingOpacity = useTransform(progress, [0, .13, .2], [1, 1, 0]);
   const openingY = useTransform(progress, [0, .22], [0, -35]);
-  const titleY = useTransform(progress, [0, .06, .2], [0, 8, 88]);
-  const foregroundOpacity = useTransform(progress, [0, .16, .23], [1, 1, 0]);
+  const titleY = useTransform(progress, [0, .06, .2], [0, 5, 150]);
+  const foregroundOpacity = useTransform(progress, [0, .17, .2], [1, 1, 0]);
   const endingOpacity = useTransform(progress, [.76, .87, 1], [0, 1, 1]);
   const endingY = useTransform(progress, [.76, .87], [30, 0]);
   const cueOpacity = useTransform(progress, [0, .08], [1, 0]);
@@ -65,9 +67,10 @@ function CinematicStory({ onFilm, ambient }: { onFilm: () => void; ambient: bool
     window.scrollTo({ top: ref.current.offsetTop + (ref.current.offsetHeight - window.innerHeight) * points[index], behavior: reduced ? 'instant' : 'smooth' });
   };
   return <section id="our-story" ref={ref} className={`cinematic-story ${reduced ? 'reduced-story' : ''}`} aria-label="Our engagement invitation, unfolding as you scroll">
-    <div className={`film-stage ${ambient ? '' : 'ambient-paused'}`}>
+    <div className="film-stage">
       <motion.div className="scene-background temple-background" style={reduced ? {} : { scale: templeScale, y: templeY, opacity: templeOpacity }}><TemplePicture eager /></motion.div>
       {!reduced && <motion.div className="scene-background ritual-background" style={{ opacity: ritualOpacity, scale: ritualScale }}><img src={artwork.ritual} alt="Gold engagement rings, a glowing brass diya, jasmine, and burgundy silk" /></motion.div>}
+      {!reduced && <motion.div className="scene-background closing-background" style={{ opacity: closingBackgroundOpacity, scale: closingBackgroundScale }}><picture><source media="(max-width: 650px)" srcSet={artwork.closingPortrait}/><img src={artwork.closingLandscape} alt="A couple in traditional attire together in a rose and jasmine garden at sunset" /></picture></motion.div>}
       <div className="film-light"/><div className="film-grain"/>
       <div className="floating-petals" aria-hidden="true">{Array.from({ length: 11 }, (_, i) => <i key={i} style={{ left: `${5 + i * 9}%`, animationDelay: `${-i * 2.7}s`, animationDuration: `${19 + i % 4 * 3}s` }}/>)}</div>
       <motion.div className="film-copy opening-copy" style={reduced ? {} : { opacity: openingOpacity, y: openingY }} aria-hidden={!reduced && chapter !== 0}>
@@ -78,12 +81,11 @@ function CinematicStory({ onFilm, ambient }: { onFilm: () => void; ambient: bool
         <div className="opening-date"><span>{eventDate.day} {eventDate.month.toUpperCase()} {eventDate.year}</span><b>✦</b><span>{invitation.time}</span></div>
       </motion.div>
       <motion.div className="temple-foreground-layer" style={reduced ? {} : { scale: templeScale, y: templeY, opacity: foregroundOpacity }}><TempleForeground/></motion.div>
-      {!reduced && <><FilmText progress={progress} stops={[.17, .24, .35, .44]} active={chapter === 1} className="promise-copy"><Lotus/><p className="eyebrow">A BOND BLESSED. A JOURNEY BEGUN.</p><h2>Two hearts.<br/><em>One beautiful promise.</em></h2><p>Woven in tradition.<br/>Written with love.</p><span className="script-whisper">Our forever begins here.</span></FilmText>
+      {!reduced && <><FilmText progress={progress} stops={[.17, .24, .35, .44]} active={chapter === 1} className="promise-copy"><Lotus/><p className="eyebrow">A BOND BLESSED. A JOURNEY BEGUN.</p><h2>Two hearts.<br/><em>One beautiful promise.</em></h2><span className="script-whisper">Our forever begins here.</span></FilmText>
       <FilmText progress={progress} stops={[.42, .5, .69, .79]} active={chapter === 2} className="date-copy"><p className="eyebrow">SAVE THIS BEAUTIFUL DAY</p><p className="date-weekday">{eventDate.weekday}</p><div className="ceremony-date"><span>{eventDate.month.toUpperCase()}</span><strong>{eventDate.day}</strong><span>{eventDate.year}</span></div><p className="ceremony-time">{invitation.time}</p><div className="small-divider"/><p className="date-note">The beginning of a lifetime, together.</p></FilmText>
       <motion.div className="film-copy closing-copy" style={{ opacity: endingOpacity, y: endingY }} aria-hidden={chapter !== 3}><p className="eyebrow">WITH OPEN HEARTS, WE INVITE YOU</p><h2>Come for the celebration.<br/><em>Stay in our story.</em></h2><p className="scene-venue">{invitation.venue}</p><p className="scene-address">{invitation.address}</p><p className="scene-hosts">With love from<br/><span>{invitation.hosts[0]} & {invitation.hosts[1]}</span></p></motion.div></>}
       <motion.a href="#invitation" className="scroll-cue" style={reduced ? {} : { opacity: cueOpacity }} onClick={e => { if (!reduced) { e.preventDefault(); goToChapter(1); } }}><span>SCROLL SLOWLY. LET THE STORY UNFOLD.</span><ArrowDown size={16}/></motion.a>
       {!reduced && <div className="film-chapters"><span className="chapter-caption"><b>0{chapter + 1}</b> / 04 <i/> {chapterLabels[chapter]}</span><nav aria-label="Invitation scenes">{chapterLabels.map((label, i) => <button key={label} onClick={() => goToChapter(i)} className={chapter === i ? 'current' : ''} aria-label={`Scene ${i + 1}: ${label}`} aria-current={chapter === i ? 'step' : undefined}><span/></button>)}</nav></div>}
-      <button className="watch-film" onClick={onFilm}><Play size={11} fill="currentColor"/><span>PLAY INVITATION</span></button>
     </div>
   </section>;
 }
@@ -96,19 +98,9 @@ function InvitationDetails() {
   return <section className="invitation-section" id="invitation"><div className="invitation-floral" aria-hidden="true"/><Reveal className="invitation-paper"><div className="paper-border" aria-hidden="true"/><Lotus className="invitation-lotus"/><p className="eyebrow">TOGETHER WITH OUR FAMILIES</p><p className="formal-title">Engagement Invitation</p><p className="formal-story">The Story of Kanth ♥ Samyuktha</p><h2>{invitation.names[0]}<span>&</span>{invitation.names[1]}</h2><p className="invitation-message">{invitation.message}</p><Ornament/><div className="formal-date"><p>{eventDate.weekday.toUpperCase()}</p><div><span>{eventDate.month.toUpperCase()}</span><strong>{eventDate.day}</strong><span>{eventDate.year}</span></div><p>AT {invitation.time}</p></div><div className="venue-details"><MapPin size={17} strokeWidth={1}/><h3>{invitation.venue}</h3><p>{invitation.address}</p></div><div className="invitation-actions"><a className="gold-button" href={invitation.mapsUrl} target="_blank" rel="noopener noreferrer">View location <ArrowUpRight size={15}/></a><a className="outline-button" href="/engagement.ics" download="Kanth-Samyuktha-Engagement.ics">Save the date <CalendarPlus size={15}/></a></div><div className="host-details"><p>WITH LOVE, INVITED BY</p><h3>{invitation.hosts[0]}<span>&</span>{invitation.hosts[1]}</h3></div>{invitation.rsvpUrl && <a className="rsvp-link" href={invitation.rsvpUrl} target="_blank" rel="noopener noreferrer">RSVP <ArrowUpRight size={13}/></a>}<p className="closing-note">Your presence is our most cherished blessing.</p></Reveal></section>;
 }
 
-function FilmDialog({ close }: { close: () => void }) {
-  const ref = useRef<HTMLDialogElement>(null);
-  const [error, setError] = useState(false);
-  useEffect(() => { const focus = document.activeElement as HTMLElement | null; const overflow = document.body.style.overflow; ref.current?.showModal(); document.body.style.overflow = 'hidden'; return () => { document.body.style.overflow = overflow; focus?.focus(); }; }, []);
-  return <dialog className="film-dialog" ref={ref} aria-label="Play the engagement invitation film" onCancel={e => { e.preventDefault(); close(); }} onClick={e => { if (e.target === e.currentTarget) close(); }}><button className="close-film" onClick={close} aria-label="Close film" autoFocus><X/></button><video controls autoPlay muted playsInline preload="metadata" poster={artwork.landscape} onError={() => setError(true)}><source src={invitation.film} type="video/mp4"/></video>{error && <p>The film could not load. Please close this window and enjoy the scrolling invitation.</p>}<div className="film-caption"><span>The Story of Kanth ♥ Samyuktha</span><span>AN ILLUSTRATED INVITATION FILM</span></div></dialog>;
-}
-
 export default function InvitationExperience() {
-  const [filmOpen, setFilmOpen] = useState(false);
-  const [ambient, setAmbient] = useState(true);
-  const reduced = useReducedMotion();
   const [pastFilm, setPastFilm] = useState(false);
   const { scrollYProgress } = useScroll();
   useEffect(() => { const update = () => { const element = document.getElementById('our-story'); setPastFilm(!!element && window.scrollY > element.offsetHeight - 100); }; update(); window.addEventListener('scroll', update, { passive: true }); return () => window.removeEventListener('scroll', update); }, []);
-  return <><a className="skip-link" href="#invitation">Skip to invitation details</a><motion.div className="reading-progress" style={{ scaleX: scrollYProgress }}/><header className={`site-header ${pastFilm ? 'over-paper' : ''}`}><a href="#our-story" className="monogram" aria-label="Kanth and Samyuktha, return to the beginning">K<span>&</span>S</a><a href="#invitation" className="invitation-shortcut">THE INVITATION <ArrowUpRight size={12}/></a></header><main><CinematicStory onFilm={() => setFilmOpen(true)} ambient={ambient && !filmOpen}/><Traditions/><InvitationDetails/></main><footer><Lotus/><p className="footer-names">Kanth <Heart size={14} fill="currentColor"/> Samyuktha</p><p className="footer-date">{eventDate.day} {eventDate.month.toUpperCase()} {eventDate.year} · {invitation.venue.toUpperCase()}</p><div><p>{invitation.credit}</p><a href="#our-story">BACK TO THE BEGINNING <ArrowUpRight size={12}/></a></div></footer>{!reduced && <button className="ambient-toggle" onClick={() => setAmbient(!ambient)} aria-label={ambient ? 'Pause floating petals' : 'Resume floating petals'} aria-pressed={!ambient}>{ambient ? <Pause size={12}/> : <Play size={12}/>}<span>{ambient ? 'PAUSE PETALS' : 'RESUME PETALS'}</span></button>}{filmOpen && <FilmDialog close={() => setFilmOpen(false)}/>}</>;
+  return <><a className="skip-link" href="#invitation">Skip to invitation details</a><motion.div className="reading-progress" style={{ scaleX: scrollYProgress }}/><header className={`site-header ${pastFilm ? 'over-paper' : ''}`}><a href="#our-story" className="monogram" aria-label="Kanth and Samyuktha, return to the beginning">K<span>&</span>S</a><a href="#invitation" className="invitation-shortcut">THE INVITATION <ArrowUpRight size={12}/></a></header><main><CinematicStory/><Traditions/><InvitationDetails/></main><footer><Lotus/><p className="footer-names">Kanth <Heart size={14} fill="currentColor"/> Samyuktha</p><p className="footer-date">{eventDate.day} {eventDate.month.toUpperCase()} {eventDate.year} · {invitation.venue.toUpperCase()}</p><div><p>{invitation.credit}</p><a href="#our-story">BACK TO THE BEGINNING <ArrowUpRight size={12}/></a></div></footer></>;
 }

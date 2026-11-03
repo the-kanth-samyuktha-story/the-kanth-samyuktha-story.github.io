@@ -13,12 +13,13 @@ export const invitation = {
   message: 'With the blessings of our families and hearts filled with joy, we invite you to celebrate our engagement. Join us as two hearts come together and a beautiful new chapter begins.',
   credit: 'Designed and developed with ♥ by Surya Teja Gupta',
   rsvpUrl: '', // Optional HTTPS RSVP form or WhatsApp link, when available.
-  film: '/media/indian/invitation-film.mp4',
 };
 export const artwork = {
   portrait: '/media/indian/temple-portrait.webp',
   landscape: '/media/indian/temple-landscape.webp',
-  ritual: '/media/indian/engagement-ritual.webp',
+  ritual: '/media/indian/engagement-ritual-v2.webp',
+  closingPortrait: '/media/indian/closing-garden-portrait.webp',
+  closingLandscape: '/media/indian/closing-garden-landscape.webp',
 };
 
 const start = new Date(invitation.startsAt);
