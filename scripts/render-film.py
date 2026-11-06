@@ -37,7 +37,7 @@ def caption_file(path, lines):
 
 scenes = [
     ('temple-landscape.png', [
-        ('The Story of Kanth ♥ Samyuktha', 85, 24, 0, GOLD),
+        ('The Kanth Samyuktha Story ♥', 85, 24, 0, GOLD),
         ('Chandra Kanth', 124, 64, 2, WINE),
         ('&', 185, 32, 8, GOLD),
         ('Samyuktha', 220, 64, 2, WINE),
@@ -90,7 +90,7 @@ with tempfile.TemporaryDirectory(prefix='engagement-film-') as folder:
                 '[first][2:v]xfade=transition=fade:duration=1.4:offset=13.2,format=yuv420p[out]',
                 '-map', '[out]', '-c:v', 'libx264', '-preset', 'fast', '-crf', '23',
                 '-threads', '2', '-movflags', '+faststart', '-metadata',
-                'title=The Story of Kanth and Samyuktha - Engagement Invitation', str(output)]
+                'title=The Kanth Samyuktha Story ♥ - Engagement Invitation', str(output)]
     subprocess.run(command, check=True)
     output.replace(destination)
     print(f'Saved {destination} ({destination.stat().st_size / 1024 / 1024:.1f} MB)', flush=True)

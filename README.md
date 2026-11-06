@@ -1,4 +1,4 @@
-# The Story of Kanth ♥ Samyuktha
+# The Kanth Samyuktha Story ♥
 
 A traditional Indian, cinematic engagement invitation built with Next.js, React, TypeScript, Motion for React, and custom CSS. Created in `/home/surya/personal2`.
 

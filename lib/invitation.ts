@@ -1,6 +1,6 @@
 /** Confirmed event details. Update this file to personalize the invitation. */
 export const invitation = {
-  title: 'The Story of Kanth ♥ Samyuktha',
+  title: 'The Kanth Samyuktha Story ♥',
   names: ['Chandra Kanth', 'Samyuktha'],
   event: 'Engagement Invitation',
   date: 'Thursday, 12 November 2026',
