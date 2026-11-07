@@ -14,7 +14,7 @@ function Reveal({ children, className = '' }: { children: ReactNode; className?:
   return <motion.div className={className} initial={reduced ? false : { opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-30px' }} transition={{ duration: .9, ease: [.22, 1, .36, 1] }}>{children}</motion.div>;
 }
 
-function slowScrollTo(id: string, duration = 2200) {
+function slowScrollTo(id: string, duration = 3200) {
   const target = document.getElementById(id);
   if (!target) return;
 
@@ -110,7 +110,7 @@ function CinematicStory() {
       <div className="floating-petals" aria-hidden="true">{Array.from({ length: 11 }, (_, i) => <i key={i} style={{ left: `${5 + i * 9}%`, animationDelay: `${-i * 2.7}s`, animationDuration: `${19 + i % 4 * 3}s` }}/>)}</div>
       <motion.div className="film-copy opening-copy" style={reduced ? {} : { opacity: openingOpacity, y: openingY }} aria-hidden={!reduced && chapter !== 0}>
         <p className="sacred-line">WITH LOVE & THE BLESSINGS OF OUR FAMILIES</p>
-        <p className="story-title" aria-label="#TheKanthSamyukthaStory"><span>#TheKanth</span><em>Samyuktha</em><span>Story</span></p>
+        <p className="story-title">#TheKanthSamyukthaStory <span aria-hidden="true">♥</span></p>
         <h1><span>{invitation.names[0]}</span><i>♥</i><span>{invitation.names[1]}</span></h1>
         <p className="script-title"><motion.span style={reduced ? {} : { y: titleY }}>Engagement Invitation</motion.span></p>
         <div className="opening-date"><span>{eventDate.month.toUpperCase()} {eventDate.dayOrdinal.toUpperCase()} {eventDate.year}</span><b>✦</b><span>{invitation.time}</span></div>
