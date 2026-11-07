@@ -45,10 +45,10 @@ scenes = [
     ]),
     ('engagement-ritual.png', [
         ('With love, we invite you to our engagement', 100, 25, 0, GOLD),
-        ('Thursday, 12 November 2026', 155, 51, 2, WINE),
-        ('10:30 AM', 215, 42, 2, WINE),
-        ('Gopalraopet', 280, 36, 2, GOLD),
-        ('Medak, Telangana, India', 322, 24, 2, GOLD),
+        ('Thursday, November 12th, 2026', 155, 51, 2, WINE),
+        ('10:00 AM', 215, 42, 2, WINE),
+        ('Arya Vysya Function Hall', 280, 36, 2, GOLD),
+        ('Gopalpet, Medak, Telangana', 322, 24, 2, GOLD),
     ]),
     ('temple-landscape.png', [
         ('Your presence is our most cherished blessing.', 90, 29, 0, GOLD),

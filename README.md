@@ -20,13 +20,13 @@ npm start
 
 - Chandra Kanth and Samyuktha
 - Engagement Invitation
-- Thursday, 12 November 2026, at 10:30 AM IST
-- Gopalraopet, Medak, Telangana, India
+- Thursday, November 12th, 2026, at 10:00 AM IST
+- Arya Vysya Function Hall, Gopalpet, Medak, Telangana
 - Invited by Thodupunuri Prabhakar and Thodupunuri Amrutha
-- Maps link: https://googlemaps.com (the exact link provided; replace it with a venue-specific link if desired)
+- Maps link: https://maps.app.goo.gl/gNgGVQ9RK7J2vLjh9
 - Designed and developed with ♥ by Surya Teja Gupta
 
-Edit `lib/invitation.ts` to change the content. The visual date components derive from `startsAt` in the Asia/Kolkata timezone. Keep `date` and `time` in sync if changing it. Update `public/engagement.ics` and re-render the film captions when changing event information. Calendar download uses 05:00 UTC, equivalent to 10:30 AM IST, and intentionally specifies no invented event end time. RSVP appears only after a real HTTPS destination is supplied.
+Edit `lib/invitation.ts` to change the content. The visual date components derive from `startsAt` in the Asia/Kolkata timezone. Keep `date` and `time` in sync if changing it. Update `public/engagement.ics` and re-render the film captions when changing event information. Calendar download uses 04:30 UTC, equivalent to 10:00 AM IST, and intentionally specifies no invented event end time. RSVP appears only after a real HTTPS destination is supplied.
 
 ## Experience
 
