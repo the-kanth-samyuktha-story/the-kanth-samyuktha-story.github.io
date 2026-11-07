@@ -14,6 +14,41 @@ function Reveal({ children, className = '' }: { children: ReactNode; className?:
   return <motion.div className={className} initial={reduced ? false : { opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-30px' }} transition={{ duration: .9, ease: [.22, 1, .36, 1] }}>{children}</motion.div>;
 }
 
+function slowScrollTo(id: string, duration = 2200) {
+  const target = document.getElementById(id);
+  if (!target) return;
+
+  const start = window.scrollY;
+  const destination = target.getBoundingClientRect().top + start;
+  const distance = destination - start;
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    window.scrollTo({ top: destination });
+    window.history.replaceState(null, '', `#${id}`);
+    return;
+  }
+
+  const root = document.documentElement;
+  const previousScrollBehavior = root.style.scrollBehavior;
+  root.style.scrollBehavior = 'auto';
+
+  const startedAt = performance.now();
+  const animate = (now: number) => {
+    const progress = Math.min((now - startedAt) / duration, 1);
+    const eased = progress < .5
+      ? 4 * progress * progress * progress
+      : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+    window.scrollTo(0, start + distance * eased);
+    if (progress < 1) requestAnimationFrame(animate);
+    else {
+      root.style.scrollBehavior = previousScrollBehavior;
+      window.history.replaceState(null, '', `#${id}`);
+    }
+  };
+
+  requestAnimationFrame(animate);
+}
+
 function TemplePicture({ eager = false }: { eager?: boolean }) {
   return <picture><source media="(max-width: 650px)" srcSet={artwork.portrait}/><img src={artwork.landscape} alt="Cinematic Indian temple artwork framed by jasmine, roses, carved arches, and brass bells" loading={eager ? 'eager' : 'lazy'} fetchPriority={eager ? 'high' : 'auto'} /></picture>;
 }
@@ -75,7 +110,7 @@ function CinematicStory() {
       <div className="floating-petals" aria-hidden="true">{Array.from({ length: 11 }, (_, i) => <i key={i} style={{ left: `${5 + i * 9}%`, animationDelay: `${-i * 2.7}s`, animationDuration: `${19 + i % 4 * 3}s` }}/>)}</div>
       <motion.div className="film-copy opening-copy" style={reduced ? {} : { opacity: openingOpacity, y: openingY }} aria-hidden={!reduced && chapter !== 0}>
         <p className="sacred-line">WITH LOVE & THE BLESSINGS OF OUR FAMILIES</p>
-        <p className="story-title">The Kanth Samyuktha Story ♥</p>
+        <p className="story-title" aria-label="#TheKanthSamyukthaStory"><span>#TheKanth</span><em>Samyuktha</em><span>Story</span></p>
         <h1><span>{invitation.names[0]}</span><i>♥</i><span>{invitation.names[1]}</span></h1>
         <p className="script-title"><motion.span style={reduced ? {} : { y: titleY }}>Engagement Invitation</motion.span></p>
         <div className="opening-date"><span>{eventDate.month.toUpperCase()} {eventDate.dayOrdinal.toUpperCase()} {eventDate.year}</span><b>✦</b><span>{invitation.time}</span></div>
@@ -102,5 +137,5 @@ export default function InvitationExperience() {
   const [pastFilm, setPastFilm] = useState(false);
   const { scrollYProgress } = useScroll();
   useEffect(() => { const update = () => { const element = document.getElementById('our-story'); setPastFilm(!!element && window.scrollY > element.offsetHeight - 100); }; update(); window.addEventListener('scroll', update, { passive: true }); return () => window.removeEventListener('scroll', update); }, []);
-  return <><a className="skip-link" href="#invitation">Skip to invitation details</a><motion.div className="reading-progress" style={{ scaleX: scrollYProgress }}/><header className={`site-header ${pastFilm ? 'over-paper' : ''}`}><a href="#our-story" className="monogram" aria-label="Kanth and Samyuktha, return to the beginning">K<span>&</span>S</a><a href="#invitation" className="invitation-shortcut">THE INVITATION <ArrowUpRight size={12}/></a></header><main><CinematicStory/><Traditions/><InvitationDetails/></main><footer><Lotus/><p className="footer-names">Kanth <Heart size={14} fill="currentColor"/> Samyuktha</p><p className="footer-date">{eventDate.month.toUpperCase()} {eventDate.dayOrdinal.toUpperCase()} {eventDate.year} · {invitation.venue.toUpperCase()} · {invitation.address.toUpperCase()}</p><div><p className="footer-credit"><span>{invitation.credit}</span><a href={invitation.creditUrl} target="_blank" rel="noopener noreferrer">{invitation.creditName}</a></p><a href="#our-story">BACK TO THE BEGINNING <ArrowUpRight size={12}/></a></div></footer></>;
+  return <><a className="skip-link" href="#invitation">Skip to invitation details</a><motion.div className="reading-progress" style={{ scaleX: scrollYProgress }}/><header className={`site-header ${pastFilm ? 'over-paper' : ''}`}><a href="#our-story" className="monogram" aria-label="Kanth and Samyuktha, return to the beginning">K<span>&</span>S</a><a href="#invitation" className="invitation-shortcut" onClick={event => { event.preventDefault(); slowScrollTo('invitation'); }}>THE INVITATION <ArrowUpRight size={12}/></a></header><main><CinematicStory/><Traditions/><InvitationDetails/></main><footer><Lotus/><p className="footer-names">Kanth <Heart size={14} fill="currentColor"/> Samyuktha</p><p className="footer-date">{eventDate.month.toUpperCase()} {eventDate.dayOrdinal.toUpperCase()} {eventDate.year} · {invitation.venue.toUpperCase()} · {invitation.address.toUpperCase()}</p><div><p className="footer-credit"><span>{invitation.credit}</span><a href={invitation.creditUrl} target="_blank" rel="noopener noreferrer">{invitation.creditName}</a></p><a href="#our-story">BACK TO THE BEGINNING <ArrowUpRight size={12}/></a></div></footer></>;
 }

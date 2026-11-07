@@ -48,8 +48,11 @@
 
 
 /* Readability refinements for event details and creator credit. */
+.story-title{display:flex;align-items:baseline;justify-content:center;white-space:nowrap;font-style:normal;font-weight:600;letter-spacing:.01em}
+.story-title em{font:400 1.55em/1 var(--script);color:var(--wine);margin:0 1px}
 .sacred-line{font-size:clamp(8px,.65vw,10px);letter-spacing:2.4px}
 .opening-date{font-size:clamp(9px,.72vw,11px);letter-spacing:1.6px}
+.opening-date>span{font-weight:700}
 .date-copy{top:9%}
 .date-copy>.eyebrow{font-size:clamp(9px,.7vw,11px);letter-spacing:2.5px}
 .date-weekday{font-size:clamp(34px,3vw,44px);margin-top:14px}
