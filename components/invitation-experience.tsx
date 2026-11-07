@@ -14,7 +14,7 @@ function Reveal({ children, className = '' }: { children: ReactNode; className?:
   return <motion.div className={className} initial={reduced ? false : { opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-30px' }} transition={{ duration: .9, ease: [.22, 1, .36, 1] }}>{children}</motion.div>;
 }
 
-function slowScrollTo(id: string, duration = 3200) {
+function slowScrollTo(id: string, duration = 7000) {
   const target = document.getElementById(id);
   if (!target) return;
 
@@ -35,10 +35,7 @@ function slowScrollTo(id: string, duration = 3200) {
   const startedAt = performance.now();
   const animate = (now: number) => {
     const progress = Math.min((now - startedAt) / duration, 1);
-    const eased = progress < .5
-      ? 4 * progress * progress * progress
-      : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-    window.scrollTo(0, start + distance * eased);
+    window.scrollTo(0, start + distance * progress);
     if (progress < 1) requestAnimationFrame(animate);
     else {
       root.style.scrollBehavior = previousScrollBehavior;

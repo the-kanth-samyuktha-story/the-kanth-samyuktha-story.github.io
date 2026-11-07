@@ -48,7 +48,7 @@
 
 
 /* Readability refinements for event details and creator credit. */
-.story-title{white-space:nowrap;font:400 clamp(25px,2.2vw,34px)/1 var(--script);color:var(--wine);letter-spacing:0}
+.story-title{white-space:nowrap;font:italic 500 clamp(20px,1.8vw,27px)/1.1 var(--serif);color:var(--wine);letter-spacing:.015em}
 .story-title>span{display:inline-block;margin-left:4px;font:400 .55em/1 var(--serif);vertical-align:middle;color:#a06c59}
 .script-title{display:flex;align-items:center;justify-content:center;gap:14px;width:min(315px,88%);margin:14px auto 0;font:600 clamp(9px,.75vw,11px)/1 var(--sans);letter-spacing:.26em;text-transform:uppercase;color:#765735;text-shadow:none}
 .script-title::before,.script-title::after{content:'';height:1px;flex:1;background:linear-gradient(90deg,transparent,#a78042b8)}
@@ -68,7 +68,7 @@
 .footer-credit a{font:italic 600 24px/1.1 var(--serif);letter-spacing:.02em;color:var(--wine);border-bottom:1px solid #a7804266;padding:0 3px 3px;transition:color .25s,transform .25s}
 .footer-credit a:hover{color:#9a4d43;transform:translateY(-1px)}
 @media(max-width:650px){
-  .story-title{font-size:27px}
+  .story-title{font-size:22px}
   .script-title{width:min(285px,94%);gap:10px;margin-top:11px;font-size:9px;letter-spacing:.21em}
   .sacred-line{font-size:8px;letter-spacing:1.4px;margin-bottom:14px}
   .opening-date{font-size:9px;letter-spacing:1.1px;gap:9px;margin-top:11px}
@@ -85,7 +85,7 @@
   .footer-credit a{font-size:25px}
 }
 @media(max-width:370px){
-  .story-title{font-size:23px}
+  .story-title{font-size:19px}
   .script-title{font-size:8px}
   .sacred-line{font-size:7.2px;letter-spacing:1.1px}
   .opening-date{font-size:8px;letter-spacing:.8px}
